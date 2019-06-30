@@ -1,6 +1,7 @@
 // main.cpp
 
 #include <iostream>
+#include "checkers.h"
 
 int main(int argc, char **argv)
 {

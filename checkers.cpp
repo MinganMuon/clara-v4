@@ -40,14 +40,14 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
                     // is there a tile to jump?
                     auto jumpedpieceiter = std::find_if(piecesonboard.begin(),piecesonboard.end(),
                                                         [this,iter,xoffset,yoffset](Piece p){ return (p.pos.x == iter->endingpiece.pos.x - xoffset) 
-                                                                                                    && (p.pos.y == iter->endingpiece.pos.y - yoffset)
-                                                                                                    && (p.color != iter->startingpiece.color); });
+                                                                                                  && (p.pos.y == iter->endingpiece.pos.y - yoffset)
+                                                                                                  && (p.color != iter->startingpiece.color); });
                     if (jumpedpieceiter != piecesonboard.end())
                     {
                         // is there a tile to land on?
                         if (std::find_if(piecesonboard.begin(),piecesonboard.end(),
                         [this,iter,xoffset,yoffset](Piece p){ return (p.pos.x == iter->endingpiece.pos.x - 2*xoffset) 
-                                                                    && (p.pos.y == iter->endingpiece.pos.y - 2*yoffset); }) == piecesonboard.end())
+                                                                  && (p.pos.y == iter->endingpiece.pos.y - 2*yoffset); }) == piecesonboard.end())
                         {
                             // we have a move!
                             // update the jumped piece list
@@ -101,7 +101,7 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
                 // is there a tile to land on?
                 if (std::find_if(piecesonboard.begin(),piecesonboard.end(),
                 [this,iter,xoffset,yoffset](Piece p){ return (p.pos.x == iter->endingpiece.pos.x - xoffset) 
-                                                            && (p.pos.y == iter->endingpiece.pos.y - yoffset); }) == piecesonboard.end())
+                                                          && (p.pos.y == iter->endingpiece.pos.y - yoffset); }) == piecesonboard.end())
                 {
                     // we have a move!
                     // create the move

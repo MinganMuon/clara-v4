@@ -4,6 +4,23 @@
 
 namespace Checkers {
 
+std::vector<Piece> applyMoveToBoard(Move themove, std::vector<Piece> piecesonboard)
+{
+    // delete the starting piece
+    piecesonboard.erase(std::remove(piecesonboard.begin(),
+                                                 piecesonboard.end(),
+                                                 themove.startingpiece));
+
+    // delete the jumped pieces
+    for (Piece p : themove.jumpedpieces)
+        piecesonboard.erase(std::remove(piecesonboard.begin(), piecesonboard.end(), p));
+
+    // add the ending piece
+    piecesonboard.push_back(themove.endingpiece);
+
+    return piecesonboard;
+}
+
 std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
 {
     // this is the function that has proven very difficult in the past...let's see how well this iteration of it goes
@@ -207,17 +224,7 @@ bool Game::makeMove(Move themove)
         return false;
     
     // now make the move!
-    // delete the starting piece
-    currentstate.piecesonboard.erase(std::remove(currentstate.piecesonboard.begin(),
-                                                 currentstate.piecesonboard.end(),
-                                                 themove.startingpiece));
-    // delete the jumped pieces
-    for (Piece p : themove.jumpedpieces)
-        currentstate.piecesonboard.erase(std::remove(currentstate.piecesonboard.begin(),
-                                                     currentstate.piecesonboard.end(),
-                                                     p));
-    // add the ending piece
-    currentstate.piecesonboard.push_back(themove.endingpiece);
+    currentstate.piecesonboard = applyMoveToBoard(themove, currentstate.piecesonboard);
     
     currentstate.playertomove = (currentstate.playertomove == PlayerColor::White) ? PlayerColor::Black : PlayerColor::White;
 

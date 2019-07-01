@@ -81,6 +81,8 @@ class Move {
             { return (lhs.startingpiece == rhs.startingpiece) && (lhs.endingpiece == rhs.endingpiece) && (lhs.jumpedpieces == rhs.jumpedpieces); };
 };
 
+std::vector<Piece> applyMoveToBoard(Move themove, std::vector<Piece> piecesonboard);
+
 enum class GameStatus {WhiteWon, BlackWon, Draw, NotCompleted};
 
 // the game state is basically a board and a player who will make a move

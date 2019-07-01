@@ -7,6 +7,23 @@ namespace Checkers {
 std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
 {
     // this is the function that has proven very difficult in the past...let's see how well this iteration of it goes
+    // update: going better than last time!
+
+    // determine which way(s) the piece can move or jump
+    std::vector<int> yoffsets;
+    if ((thepiece.type == TileType::Man) && (thepiece.color == PlayerColor::White))
+    {
+        yoffsets.push_back(1);
+    }
+    else if ((thepiece.type == TileType::Man) && (thepiece.color == PlayerColor::White))
+    {
+        yoffsets.push_back(-1);
+    }
+    else
+    {
+        yoffsets.push_back(1);
+        yoffsets.push_back(-1);
+    }
 
     // get jump moves
     //
@@ -34,7 +51,7 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
             
             for (int xoffset : std::vector<int>{-1,1})
             {
-                for (int yoffset : std::vector<int>{-1,1})
+                for (int yoffset : yoffsets)
                 {
                     // is there a piece to jump?
                     auto jumpedpieceiter = std::find_if(piecesonboard.begin(),piecesonboard.end(),
@@ -95,7 +112,7 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
         std::vector<Move> movelist = {{}};
         for (int xoffset : std::vector<int>{-1,1})
         {
-            for (int yoffset : std::vector<int>{-1,1})
+            for (int yoffset : yoffsets)
             {
                 // is there a piece to land on?
                 if (std::find_if(piecesonboard.begin(),piecesonboard.end(),

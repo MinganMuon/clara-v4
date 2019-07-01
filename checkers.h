@@ -42,6 +42,33 @@ class Piece {
             { return (lhs.type == rhs.type) && (lhs.color == rhs.color) && (lhs.pos == rhs.pos); };
 };
 
+// the starting board
+const std::vector<Piece> StartingBoard = {Piece(TileType::Man,PlayerColor::Black,BoardPos(1,0)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(3,0)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(5,0)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(7,0)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(0,1)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(2,1)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(4,1)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(6,1)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(1,2)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(3,2)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(5,2)),
+                                          Piece(TileType::Man,PlayerColor::Black,BoardPos(7,2)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(0,5)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(2,5)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(4,5)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(6,5)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(1,6)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(3,6)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(5,6)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(7,6)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(0,7)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(2,7)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(4,7)),
+                                          Piece(TileType::Man,PlayerColor::White,BoardPos(6,7)),
+                                          }; 
+
 // a move is comprised of a starting piece, an ending piece, and a list of captured pieces
 class Move {
     public:
@@ -84,8 +111,6 @@ class Game {
         GameState currentstate;
         int numberofunproductivemoves; // how many moves in a row have happened that haven't resulted in a capture?
         int unproductivemovelimit; // how many moves in a row that don't result in a capture should we allow?
-
-        const std::vector<Piece> StartingBoard = {Piece(TileType::Man,PlayerColor::White,BoardPos(1,0))}; // the starting board
 };
 
 }

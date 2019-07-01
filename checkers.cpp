@@ -32,7 +32,7 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
     {
         yoffsets.push_back(1);
     }
-    else if ((thepiece.type == TileType::Man) && (thepiece.color == PlayerColor::White))
+    else if ((thepiece.type == TileType::Man) && (thepiece.color == PlayerColor::Black))
     {
         yoffsets.push_back(-1);
     }

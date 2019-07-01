@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     }
     else if (toplevelcommand == "play")
     {
-        std::cout << "not implemented yet";
+        PlayCommand::play(cmdlineoptions);
     }
     else
     {

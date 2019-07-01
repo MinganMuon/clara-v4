@@ -18,7 +18,7 @@ void printAICommandHelp(std::vector<std::string> cmdlineoptions)
 
 void listPlayableAIs()
 {
-    std::cout << "not implemented yet\n";
+    std::cout << "playable ais: random-ai, simple-ai\n";
 }
 
 void ai(std::vector<std::string> cmdlineoptions)

@@ -9,7 +9,7 @@
 namespace SimpleAIs
 {
 
-const std::vector<std::string> simpleAIsList = {"Random AI", "Simple Eval Single-ply AI"};
+const std::vector<std::string> simpleAIsList = {"random-ai", "simple-ai"};
 
 Checkers::Move getRandomAIMove(const Checkers::GameState &thegamestate);
 

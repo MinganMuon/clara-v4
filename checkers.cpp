@@ -131,10 +131,11 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
         {
             for (int yoffset : yoffsets)
             {
-                // is there a piece to land on?
-                if (std::find_if(piecesonboard.begin(),piecesonboard.end(),
+                // is there a tile to land on?
+                if ((BoardPos(thepiece.pos.x - xoffset, thepiece.pos.y - yoffset).isValidPos())
+                    && (std::find_if(piecesonboard.begin(),piecesonboard.end(),
                 [this,thepiece,xoffset,yoffset](Piece p){ return (p.pos.x == thepiece.pos.x - xoffset) 
-                                                          && (p.pos.y == thepiece.pos.y - yoffset); }) == piecesonboard.end())
+                                                          && (p.pos.y == thepiece.pos.y - yoffset); }) == piecesonboard.end()))
                 {
                     // we have a move!
                     // create the move

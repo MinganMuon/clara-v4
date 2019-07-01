@@ -127,11 +127,13 @@ void play(std::vector<std::string> cmdlineoptions)
         {
             if (opponent == "random-ai")
             {
-                thegame.makeMove(SimpleAIs::getRandomAIMove(thegame.getGameState()));
+                if (!thegame.makeMove(SimpleAIs::getRandomAIMove(thegame.getGameState())))
+                    std::cout << "error: the ai failed to make a move.\n\n";
             }
             else if (opponent == "simple-ai")
             {
-                thegame.makeMove(SimpleAIs::getSimpleEvalSinglePlyAIMove(thegame.getGameState()));
+                if (!thegame.makeMove(SimpleAIs::getSimpleEvalSinglePlyAIMove(thegame.getGameState())))
+                    std::cout << "error: the ai failed to make a move.\n\n";
             }
             if (thegame.determineGameStatus() != Checkers::GameStatus::NotCompleted)
                 done = true;

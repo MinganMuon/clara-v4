@@ -26,8 +26,8 @@ void printboard(std::vector<Checkers::Piece> piecesonboard)
     board[0] = "  0 1 2 3 4 5 6 7 \n";
     for (int i = 1; i < 5; i++)
     {
-        board[i*2-1] = std::to_string(i*2-2) + "   x   x   x   x \n";
-        board[i*2] = std::to_string(i*2-1) + " x   x   x   x   \n";
+        board[i*2-1] = std::to_string(i*2-2) + "   .   .   .   . \n";
+        board[i*2]   = std::to_string(i*2-1) + " .   .   .   .   \n";
     }
 
     // add the pieces
@@ -75,7 +75,7 @@ void play(std::vector<std::string> cmdlineoptions)
         Checkers::Move themove = [&thegame]() -> Checkers::Move {
             while (true)
             {
-                std::cout << "select a move with the format of \"oldx oldy newx newy\": ";
+                std::cout << "select a move with the format of \"<old x> <old y> <new x> <new y>\": ";
                 int oldx, oldy, newx, newy;
                 std::cin >> oldx >> oldy >> newx >> newy;
 
@@ -92,6 +92,7 @@ void play(std::vector<std::string> cmdlineoptions)
                 }
                 else
                 {
+                    std::cout << "\n";
                     return *moveiter;
                 }
             }

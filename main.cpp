@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "playcommand.h"
+#include "aicommand.h"
 
 void printTopLevelHelp()
 {
@@ -16,6 +17,7 @@ void printTopLevelHelp()
     std::cout << "<command> can be one of the following:\n";
     std::cout << "help: prints this help when given no arguments or prints help for a command given as an argument\n";
     std::cout << "play: plays a game of checkers. see the help for the play command for details.\n";
+    std::cout << "ai: handles various functions relating to clara's AIs. see the help for the ai command for details.\n";
 }
 
 void handleHelpCommand(std::vector<std::string> cmdlineoptions)
@@ -28,6 +30,11 @@ void handleHelpCommand(std::vector<std::string> cmdlineoptions)
     {
         cmdlineoptions.erase(cmdlineoptions.begin());
         PlayCommand::printPlayCommandHelp(cmdlineoptions);
+    }
+    else if (cmdlineoptions[0] == "ai")
+    {
+        cmdlineoptions.erase(cmdlineoptions.begin());
+        AICommand::printAICommandHelp(cmdlineoptions);
     }
     else
     {
@@ -65,6 +72,10 @@ int main(int argc, char **argv)
     else if (toplevelcommand == "play")
     {
         PlayCommand::play(cmdlineoptions);
+    }
+    else if (toplevelcommand == "ai")
+    {
+        AICommand::ai(cmdlineoptions);
     }
     else
     {

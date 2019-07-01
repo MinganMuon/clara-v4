@@ -1,7 +1,10 @@
 // main.cpp
 
 #include <iostream>
-#include "checkers.h"
+#include <string>
+#include <vector>
+
+#include "playcommand.h"
 
 void printTopLevelHelp()
 {
@@ -23,7 +26,8 @@ void handleHelpCommand(std::vector<std::string> cmdlineoptions)
     }
     else if (cmdlineoptions[0] == "play")
     {
-        std::cout << "not implemented yet";
+        cmdlineoptions.erase(cmdlineoptions.begin());
+        PlayCommand::printPlayCommandHelp(cmdlineoptions);
     }
     else
     {

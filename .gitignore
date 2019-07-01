@@ -1,3 +1,5 @@
+*.ilk
+*.pdb
 *.obj
 clara.exe
 

@@ -20,14 +20,13 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
     //      i.e. until all moves in the movelist have no possible moves that can be made from them
     std::vector<Move> ml = {{}};
     ml.push_back(Move(thepiece,thepiece,std::vector<Piece>()));
-    auto enditer = ml.end();
-    auto iter = ml.begin();
-    while (iter != enditer)
+    int i = 0;
+    while (i < ml.size())
     {
         // if a piece gets kinged then the turn ends
-        if ((iter->startingpiece.type == TileType::Man) && (iter->endingpiece.type == TileType::King))
+        if ((ml[i].startingpiece.type == TileType::Man) && (ml[i].endingpiece.type == TileType::King))
         {
-            ++iter;
+            i++;
         }
         else
         {
@@ -37,29 +36,30 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
             {
                 for (int yoffset : std::vector<int>{-1,1})
                 {
-                    // is there a tile to jump?
+                    // is there a piece to jump?
                     auto jumpedpieceiter = std::find_if(piecesonboard.begin(),piecesonboard.end(),
-                                                        [this,iter,xoffset,yoffset](Piece p){ return (p.pos.x == iter->endingpiece.pos.x - xoffset) 
-                                                                                                  && (p.pos.y == iter->endingpiece.pos.y - yoffset)
-                                                                                                  && (p.color != iter->startingpiece.color); });
+                                                        [this,&ml,xoffset,yoffset,i](Piece p){ return (p.pos.x == ml[i].endingpiece.pos.x - xoffset) 
+                                                                                                   && (p.pos.y == ml[i].endingpiece.pos.y - yoffset)
+                                                                                                   && (p.color != ml[i].startingpiece.color); });
                     if (jumpedpieceiter != piecesonboard.end())
                     {
                         // is there a tile to land on?
-                        if (std::find_if(piecesonboard.begin(),piecesonboard.end(),
-                        [this,iter,xoffset,yoffset](Piece p){ return (p.pos.x == iter->endingpiece.pos.x - 2*xoffset) 
-                                                                  && (p.pos.y == iter->endingpiece.pos.y - 2*yoffset); }) == piecesonboard.end())
+                        if ((BoardPos(ml[i].endingpiece.pos.x - 2*xoffset, ml[i].endingpiece.pos.y - 2*yoffset).isValidPos())
+                            && (std::find_if(piecesonboard.begin(),piecesonboard.end(),
+                        [this,&ml,xoffset,yoffset,i](Piece p){ return (p.pos.x == ml[i].endingpiece.pos.x - 2*xoffset) 
+                                                                   && (p.pos.y == ml[i].endingpiece.pos.y - 2*yoffset); }) == piecesonboard.end()))
                         {
                             // we have a move!
                             // update the jumped piece list
-                            std::vector<Piece> newjumpedpieces = iter->jumpedpieces;
+                            std::vector<Piece> newjumpedpieces = ml[i].jumpedpieces;
                             newjumpedpieces.push_back(*jumpedpieceiter);
                             // create the move
-                            Move m = Move(iter->startingpiece,
-                                        Piece(TileType::Man, iter->startingpiece.color, BoardPos(iter->endingpiece.pos.x - 2*xoffset, iter->endingpiece.pos.y - 2*yoffset)),
+                            Move m = Move(ml[i].startingpiece,
+                                        Piece(TileType::Man, ml[i].startingpiece.color, BoardPos(ml[i].endingpiece.pos.x - 2*xoffset, ml[i].endingpiece.pos.y - 2*yoffset)),
                                         newjumpedpieces);
                             // does the piece get kinged?
-                            if (((iter->startingpiece.color == PlayerColor::White) && (iter->endingpiece.pos.y == 0))
-                                || ((iter->startingpiece.color == PlayerColor::Black) && (iter->endingpiece.pos.y == 7)))
+                            if (((ml[i].startingpiece.color == PlayerColor::White) && (ml[i].endingpiece.pos.y - 2*yoffset == 0))
+                                || ((ml[i].startingpiece.color == PlayerColor::Black) && (ml[i].endingpiece.pos.y - 2*yoffset == 7)))
                             {
                                 m.endingpiece.type = TileType::King;
                             }
@@ -74,13 +74,12 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
             if (newjump)
             {
                 // we have discovered and added new jumps, so erase the current move and update the iterators
-                iter = ml.erase(iter);
-                enditer = ml.end();
+                ml.erase(ml.begin() + i);
             }
             else
             {
                 // no new jumps, so proceed to the next move
-                ++iter;
+                i++;
             }
         }
     }
@@ -98,19 +97,19 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
         {
             for (int yoffset : std::vector<int>{-1,1})
             {
-                // is there a tile to land on?
+                // is there a piece to land on?
                 if (std::find_if(piecesonboard.begin(),piecesonboard.end(),
-                [this,iter,xoffset,yoffset](Piece p){ return (p.pos.x == iter->endingpiece.pos.x - xoffset) 
-                                                          && (p.pos.y == iter->endingpiece.pos.y - yoffset); }) == piecesonboard.end())
+                [this,thepiece,xoffset,yoffset](Piece p){ return (p.pos.x == thepiece.pos.x - xoffset) 
+                                                          && (p.pos.y == thepiece.pos.y - yoffset); }) == piecesonboard.end())
                 {
                     // we have a move!
                     // create the move
-                    Move m = Move(iter->startingpiece,
-                                Piece(TileType::Man, iter->startingpiece.color, BoardPos(iter->endingpiece.pos.x - xoffset, iter->endingpiece.pos.y - yoffset)),
+                    Move m = Move(thepiece,
+                                Piece(TileType::Man, thepiece.color, BoardPos(thepiece.pos.x - xoffset, thepiece.pos.y - yoffset)),
                                 std::vector<Piece>());
                     // does the piece get kinged?
-                    if (((iter->startingpiece.color == PlayerColor::White) && (iter->endingpiece.pos.y == 0))
-                        || ((iter->startingpiece.color == PlayerColor::Black) && (iter->endingpiece.pos.y == 7)))
+                    if (((thepiece.color == PlayerColor::White) && (thepiece.pos.y - yoffset == 0))
+                        || ((thepiece.color == PlayerColor::Black) && (thepiece.pos.y - yoffset == 7)))
                     {
                         m.endingpiece.type = TileType::King;
                     }
@@ -132,16 +131,19 @@ std::vector<Move> GameState::getListOfAllLegalMoves() const
 
     for (Piece p : piecesonboard)
     {
-        std::vector<Move> piecemovelist = getListOfLegalMoves(p);
-        if (!piecemovelist.empty())
+        if (p.color == playertomove)
         {
-            if (piecemovelist[0].jumpedpieces.empty()) // only need to consider the first move because getListOfLegalMoves will remove any non-jump moves if the piece has jump moves
+            std::vector<Move> piecemovelist = getListOfLegalMoves(p);
+            if (!piecemovelist.empty())
             {
-                nonjumpmovelist.insert(nonjumpmovelist.end(), piecemovelist.begin(), piecemovelist.end());
-            }
-            else
-            {
-                jumpmovelist.insert(jumpmovelist.end(), piecemovelist.begin(), piecemovelist.end());
+                if (piecemovelist[0].jumpedpieces.empty()) // only need to consider the first move because getListOfLegalMoves will remove any non-jump moves if the piece has jump moves
+                {
+                    nonjumpmovelist.insert(nonjumpmovelist.end(), piecemovelist.begin(), piecemovelist.end());
+                }
+                else
+                {
+                    jumpmovelist.insert(jumpmovelist.end(), piecemovelist.begin(), piecemovelist.end());
+                }
             }
         }
     }

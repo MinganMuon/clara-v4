@@ -93,7 +93,7 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
     }
     else
     {
-        std::vector<Move> ml = {{}};
+        std::vector<Move> movelist = {{}};
         for (int xoffset : std::vector<int>{-1,1})
         {
             for (int yoffset : std::vector<int>{-1,1})
@@ -115,11 +115,11 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
                         m.endingpiece.type = TileType::King;
                     }
                     // add the move to the move list
-                    ml.push_back(m);
+                    movelist.push_back(m);
                 }
             }
         }
-        return ml;
+        return movelist;
     }
 }
 

@@ -122,7 +122,7 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
                             newjumpedpieces.push_back(*jumpedpieceiter);
                             // create the move
                             Move m = Move(ml[i].startingpiece,
-                                        Piece(TileType::Man, ml[i].startingpiece.color, BoardPos(ml[i].endingpiece.pos.x - 2*xoffset, ml[i].endingpiece.pos.y - 2*yoffset)),
+                                        Piece(ml[i].startingpiece.type, ml[i].startingpiece.color, BoardPos(ml[i].endingpiece.pos.x - 2*xoffset, ml[i].endingpiece.pos.y - 2*yoffset)),
                                         newjumpedpieces);
                             // does the piece get kinged?
                             if (((ml[i].startingpiece.color == PlayerColor::White) && (ml[i].endingpiece.pos.y - 2*yoffset == 0))
@@ -173,7 +173,7 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
                     // we have a move!
                     // create the move
                     Move m = Move(thepiece,
-                                Piece(TileType::Man, thepiece.color, BoardPos(thepiece.pos.x - xoffset, thepiece.pos.y - yoffset)),
+                                Piece(thepiece.type, thepiece.color, BoardPos(thepiece.pos.x - xoffset, thepiece.pos.y - yoffset)),
                                 std::vector<Piece>());
                     // does the piece get kinged?
                     if (((thepiece.color == PlayerColor::White) && (thepiece.pos.y - yoffset == 0))

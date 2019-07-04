@@ -18,11 +18,26 @@ void printAICommandHelp(std::vector<std::string> cmdlineoptions)
 
 void listPlayableAIs()
 {
-    std::string simpleailist = "";
-    for (std::string s : SimpleAIs::simpleAIsNameList)
-        simpleailist = simpleailist + s + ", ";
-    simpleailist.erase(simpleailist.end() - 2);
-    std::cout << "playable ais from category \"simple AIs\": " + simpleailist;
+    std::vector<std::string> categorytexts;
+    std::vector<std::string> catindexes;
+    for (std::array<std::string,2> a : AISwitchboard::getListOfAllAIsByCategory())
+    {
+        auto catiter = std::find(catindexes.begin(),catindexes.end(),a[0]);
+        if (catiter == catindexes.end())
+        {
+            categorytexts.push_back("playable ais in category " + a[0] + ": " + a[1] + ", ");
+            catindexes.push_back(a[0]);
+        }
+        else
+        {
+            categorytexts[catiter - catindexes.begin()] += a[1] + ", ";
+        }
+    }
+    for (std::string s : categorytexts)
+    {
+        s.erase(s.end()-2);
+        std::cout << s + "\n";
+    }
 }
 
 void ai(std::vector<std::string> cmdlineoptions)

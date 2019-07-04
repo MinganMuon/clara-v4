@@ -6,6 +6,7 @@
 #include <array>
 
 #include "checkers.h"
+#include "aiswitchboard.h"
 
 namespace PlayCommand
 {

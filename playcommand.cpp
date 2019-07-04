@@ -1,7 +1,6 @@
 // playcommand.cpp
 
 #include "playcommand.h"
-#include "simpleais.h"
 
 namespace PlayCommand
 {
@@ -56,7 +55,6 @@ void printboard(std::vector<Checkers::Piece> piecesonboard)
 void play(std::vector<std::string> cmdlineoptions)
 {
     std::string opponent;
-    size_t simpleailistpos = 0;
     if (cmdlineoptions.empty())
     {
         printPlayCommandHelp(cmdlineoptions);
@@ -68,11 +66,11 @@ void play(std::vector<std::string> cmdlineoptions)
     }
     else
     {
-        auto simpleaisiter = std::find(SimpleAIs::simpleAIsNameList.begin(), SimpleAIs::simpleAIsNameList.end(), cmdlineoptions[0]);
-        if (simpleaisiter != SimpleAIs::simpleAIsNameList.end())
+        const std::vector<std::string> ailist = AISwitchboard::getListOfAllAIs();
+        auto aisiter = std::find(ailist.begin(), ailist.end(), cmdlineoptions[0]);
+        if (aisiter != ailist.end())
         {
-            opponent = (*simpleaisiter);
-            simpleailistpos = simpleaisiter - SimpleAIs::simpleAIsNameList.begin();
+            opponent = cmdlineoptions[0];
         }
         else
         {
@@ -126,11 +124,8 @@ void play(std::vector<std::string> cmdlineoptions)
 
         if ((opponent != "human") && (!done))
         {
-            if (std::find(SimpleAIs::simpleAIsNameList.begin(), SimpleAIs::simpleAIsNameList.end(), opponent) != SimpleAIs::simpleAIsNameList.end())
-            {
-                if (!thegame.makeMove((*SimpleAIs::simpleAIsFuncList[simpleailistpos])(thegame.getGameState())))
-                    std::cout << "error: the ai failed to make a move.\n\n";
-            }
+            if (!thegame.makeMove(AISwitchboard::getMoveFromAI(opponent,thegame.getGameState(),std::vector<std::string>())))
+                std::cout << "error: the ai failed to make a move.\n\n";
             if (thegame.determineGameStatus() != Checkers::GameStatus::NotCompleted)
                 done = true;
         }

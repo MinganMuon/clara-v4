@@ -3,8 +3,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <array>
 
-#include "simpleais.h"
+#include "aiswitchboard.h"
 
 namespace AICommand
 {

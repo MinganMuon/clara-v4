@@ -10,10 +10,10 @@ void printPlayCommandHelp(std::vector<std::string> cmdlineoptions)
     std::cout << "clara-v4 help for the play command\n";
     std::cout << "----------------------------------\n\n";
 
-    std::cout << "usage: clara play <human/ai>\n\n";
+    std::cout << "usage: clara play <opponent>\n\n";
 
-    std::cout << "if human is selected, starts a game pitting the user against himself\n";
-    std::cout << "if a playable ai (see output of clara ai list-playable) is selected, starts a game pitting the user against the selected ai\n\n";
+    std::cout << "if \"human\" is selected as the opponent, starts a game pitting the user against himself\n";
+    std::cout << "if a playable ai (see output of clara ai list-playable) is selected as the opponent, starts a game pitting the user against the selected ai\n\n";
 
     std::cout << "on the displayed board, white men are represented by \"w\",\n"
               << "black men by \"b\", and kings as the uppercase variants of the men.\n";

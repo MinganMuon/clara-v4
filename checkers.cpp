@@ -110,29 +110,34 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
                                                                                                    && (p.color != ml[i].startingpiece.color); });
                     if (jumpedpieceiter != piecesonboard.end())
                     {
-                        // is there a tile to land on?
-                        if ((BoardPos(ml[i].endingpiece.pos.x - 2*xoffset, ml[i].endingpiece.pos.y - 2*yoffset).isValidPos())
-                            && (std::find_if(piecesonboard.begin(),piecesonboard.end(),
-                        [this,&ml,xoffset,yoffset,i](Piece p){ return (p.pos.x == ml[i].endingpiece.pos.x - 2*xoffset) 
-                                                                   && (p.pos.y == ml[i].endingpiece.pos.y - 2*yoffset); }) == piecesonboard.end()))
+                        // have we already jumped over this tile?
+                        // the initial omission of this check lead to a hilarious (and quite frustrating) bug where a king would jump back and forth over a piece ad infinitum!
+                        if (ml[i].jumpedpieces.empty() || std::find(ml[i].jumpedpieces.begin(), ml[i].jumpedpieces.end(), (*jumpedpieceiter)) != ml[i].jumpedpieces.end())
                         {
-                            // we have a move!
-                            // update the jumped piece list
-                            std::vector<Piece> newjumpedpieces = ml[i].jumpedpieces;
-                            newjumpedpieces.push_back(*jumpedpieceiter);
-                            // create the move
-                            Move m = Move(ml[i].startingpiece,
-                                        Piece(ml[i].startingpiece.type, ml[i].startingpiece.color, BoardPos(ml[i].endingpiece.pos.x - 2*xoffset, ml[i].endingpiece.pos.y - 2*yoffset)),
-                                        newjumpedpieces);
-                            // does the piece get kinged?
-                            if (((ml[i].startingpiece.color == PlayerColor::White) && (ml[i].endingpiece.pos.y - 2*yoffset == 0))
-                                || ((ml[i].startingpiece.color == PlayerColor::Black) && (ml[i].endingpiece.pos.y - 2*yoffset == 7)))
+                            // is there a tile to land on?
+                            if ((BoardPos(ml[i].endingpiece.pos.x - 2*xoffset, ml[i].endingpiece.pos.y - 2*yoffset).isValidPos())
+                                && (std::find_if(piecesonboard.begin(),piecesonboard.end(),
+                            [this,&ml,xoffset,yoffset,i](Piece p){ return (p.pos.x == ml[i].endingpiece.pos.x - 2*xoffset) 
+                                                                    && (p.pos.y == ml[i].endingpiece.pos.y - 2*yoffset); }) == piecesonboard.end()))
                             {
-                                m.endingpiece.type = TileType::King;
+                                // we have a move!
+                                // update the jumped piece list
+                                std::vector<Piece> newjumpedpieces = ml[i].jumpedpieces;
+                                newjumpedpieces.push_back(*jumpedpieceiter);
+                                // create the move
+                                Move m = Move(ml[i].startingpiece,
+                                            Piece(ml[i].startingpiece.type, ml[i].startingpiece.color, BoardPos(ml[i].endingpiece.pos.x - 2*xoffset, ml[i].endingpiece.pos.y - 2*yoffset)),
+                                            newjumpedpieces);
+                                // does the piece get kinged?
+                                if (((ml[i].startingpiece.color == PlayerColor::White) && (ml[i].endingpiece.pos.y - 2*yoffset == 0))
+                                    || ((ml[i].startingpiece.color == PlayerColor::Black) && (ml[i].endingpiece.pos.y - 2*yoffset == 7)))
+                                {
+                                    m.endingpiece.type = TileType::King;
+                                }
+                                // add the move to the move list
+                                ml.push_back(m);
+                                newjump = true;
                             }
-                            // add the move to the move list
-                            ml.push_back(m);
-                            newjump = true;
                         }
                     }
                 }
@@ -140,7 +145,7 @@ std::vector<Move> GameState::getListOfLegalMoves(const Piece & thepiece) const
             
             if (newjump)
             {
-                // we have discovered and added new jumps, so erase the current move and update the iterators
+                // we have discovered and added new moves, so remove the current move
                 ml.erase(ml.begin() + i);
             }
             else

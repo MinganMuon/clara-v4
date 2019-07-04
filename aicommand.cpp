@@ -18,7 +18,11 @@ void printAICommandHelp(std::vector<std::string> cmdlineoptions)
 
 void listPlayableAIs()
 {
-    std::cout << "playable ais: random-ai, simple-ai\n";
+    std::string simpleailist = "";
+    for (std::string s : SimpleAIs::simpleAIsNameList)
+        simpleailist = simpleailist + s + ", ";
+    simpleailist.erase(simpleailist.end() - 2);
+    std::cout << "playable ais from category \"simple AIs\": " + simpleailist;
 }
 
 void ai(std::vector<std::string> cmdlineoptions)

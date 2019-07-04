@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "simpleais.h"
+
 namespace AICommand
 {
 

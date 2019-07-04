@@ -13,7 +13,14 @@ void printAICommandHelp(std::vector<std::string> cmdlineoptions)
     std::cout << "usage: clara ai <command> <arguments>\n\n";
     
     std::cout << "<command> can be one of the following:\n";
-    std::cout << "list-playable: lists all AIs playable via clara play <ai>\n";
+    std::cout << "list-playable: lists all AIs playable via clara play or clara ai play\n";
+    std::cout << "play: plays one ai against another. format:\n"
+              << "        clara ai play <ai-white> versus <ai-black> <number-of-games>\n"
+              << "      where\n"
+              << "        - <ai-white> and <ai-black> are the ais to play white and black respectively and\n"
+              << "        - <number-of-games> is the number of games to have the ais play.\n"
+              << "      if <number-of-games> is 1, then the full game will be printed upon completion;\n"
+              << "      if <number-of-games> is greater than 1, then a summary of wins/losses/percentages/etc. will be printed.\n";
 }
 
 void listPlayableAIs()
@@ -40,6 +47,66 @@ void listPlayableAIs()
     }
 }
 
+void play(std::vector<std::string> cmdlineoptions)
+{
+    std::vector<std::string> ailist = AISwitchboard::getListOfAllAIs();
+    if ((cmdlineoptions.size() != 5)
+       || (std::find(ailist.begin(),ailist.end(),cmdlineoptions[1]) == ailist.end())
+       || (cmdlineoptions[2] != "versus")
+       || (std::find(ailist.begin(),ailist.end(),cmdlineoptions[3]) == ailist.end())
+       || (std::stoi(cmdlineoptions[4]) < 1))
+    {
+        printAICommandHelp(cmdlineoptions);
+    }
+
+    int numberofgames = std::stoi(cmdlineoptions[4]);
+    std::string aione = cmdlineoptions[1];
+    std::string aitwo = cmdlineoptions[3];
+
+    std::cout << "playing " + aione + " against " + aitwo + " for " + std::to_string(numberofgames) + " game" + ((numberofgames == 1) ? "" : "s") + ".\n";
+
+    if (numberofgames == 1)
+    {
+        Checkers::Game thegame = Checkers::Game();
+        bool done = false;
+        while (!done)
+        {
+            Checkers::printboard(thegame.getGameState().piecesonboard);
+
+            bool aioneturn = (thegame.getGameState().playertomove == Checkers::PlayerColor::White);
+
+            std::string colortext = (aioneturn ? "white" : "black");
+            std::cout << "\n" + (aioneturn ? aione : aitwo) + " is now playing as " + colortext + ".\n";
+
+            if (!thegame.makeMove(AISwitchboard::getMoveFromAI((aioneturn ? aione : aitwo),thegame.getGameState(),std::vector<std::string>())))
+            {
+                std::cout << "error: the ai failed to make a move.\n\n";
+                std::cout << "quitting...\n";
+                return;
+            }
+
+            if (thegame.determineGameStatus() != Checkers::GameStatus::NotCompleted)
+                done = true;
+        }
+
+        Checkers::GameStatus gs = thegame.determineGameStatus();
+        std::string gstext;
+        if (gs == Checkers::GameStatus::BlackWon)
+        gstext = aitwo + " (black) won!";
+        else if (gs == Checkers::GameStatus::WhiteWon)
+        gstext = aione + " (white) won!";
+        else if (gs == Checkers::GameStatus::Draw)
+        gstext = "the game resulted in a draw.";
+        else if (gs == Checkers::GameStatus::NotCompleted)
+        gstext = "the game was stopped before it had completed.";
+        std::cout << "\n" + gstext + "\n";
+    }
+    else
+    {
+        std::cout << "not implemented yet\n";
+    }
+}
+
 void ai(std::vector<std::string> cmdlineoptions)
 {
     if (cmdlineoptions.empty())
@@ -49,6 +116,10 @@ void ai(std::vector<std::string> cmdlineoptions)
     else if (cmdlineoptions[0] == "list-playable")
     {
         listPlayableAIs();
+    }
+    else if (cmdlineoptions[0] == "play")
+    {
+        play(cmdlineoptions);
     }
     else
     {

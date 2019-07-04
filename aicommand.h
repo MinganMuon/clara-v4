@@ -9,6 +9,7 @@
 #include <array>
 
 #include "aiswitchboard.h"
+#include "checkers.h"
 
 namespace AICommand
 {
@@ -16,6 +17,8 @@ namespace AICommand
 void printAICommandHelp(std::vector<std::string> cmdlineoptions);
 
 void listPlayableAIs();
+
+void play(std::vector<std::string> cmdlineoptions);
 
 void ai(std::vector<std::string> cmdlineoptions);
 

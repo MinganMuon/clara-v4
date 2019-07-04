@@ -19,39 +19,6 @@ void printPlayCommandHelp(std::vector<std::string> cmdlineoptions)
               << "black men by \"b\", and kings as the uppercase variants of the men.\n";
 }
 
-void printboard(std::vector<Checkers::Piece> piecesonboard)
-{
-    std::array<std::string,9> board;
-    
-    // initialize the board outline
-    board[0] = "  0 1 2 3 4 5 6 7 \n";
-    for (int i = 1; i < 5; i++)
-    {
-        board[i*2-1] = std::to_string(i*2-2) + "   .   .   .   . \n";
-        board[i*2]   = std::to_string(i*2-1) + " .   .   .   .   \n";
-    }
-
-    // add the pieces
-    for (Checkers::Piece p : piecesonboard)
-    {
-        std::string pchar = "e";
-        if ((p.type == Checkers::TileType::Man) && (p.color == Checkers::PlayerColor::White))
-            pchar = "w";
-        else if ((p.type == Checkers::TileType::King) && (p.color == Checkers::PlayerColor::White))
-            pchar = "W";
-        else if ((p.type == Checkers::TileType::Man) && (p.color == Checkers::PlayerColor::Black))
-            pchar = "b";
-        else if ((p.type == Checkers::TileType::King) && (p.color == Checkers::PlayerColor::Black))
-            pchar = "B";
-        
-        board[1+p.pos.y].replace((p.pos.x+1)*2,1,pchar);
-    }
-
-    // print the board
-    for (std::string s : board)
-        std::cout << s;
-}
-
 void play(std::vector<std::string> cmdlineoptions)
 {
     std::string opponent;
@@ -86,7 +53,7 @@ void play(std::vector<std::string> cmdlineoptions)
     bool done = false;
     while (!done)
     {
-        printboard(thegame.getGameState().piecesonboard);
+        Checkers::printboard(thegame.getGameState().piecesonboard);
 
         std::string playertext = ((thegame.getGameState().playertomove == Checkers::PlayerColor::White) ? "white" : "black");
         std::cout << "\nyou are " +  playertext + ".\n";

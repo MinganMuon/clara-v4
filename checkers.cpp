@@ -4,6 +4,39 @@
 
 namespace Checkers {
 
+void printboard(std::vector<Piece> piecesonboard)
+{
+    std::array<std::string,9> board;
+    
+    // initialize the board outline
+    board[0] = "  0 1 2 3 4 5 6 7 \n";
+    for (int i = 1; i < 5; i++)
+    {
+        board[i*2-1] = std::to_string(i*2-2) + "   .   .   .   . \n";
+        board[i*2]   = std::to_string(i*2-1) + " .   .   .   .   \n";
+    }
+
+    // add the pieces
+    for (Piece p : piecesonboard)
+    {
+        std::string pchar = "e";
+        if ((p.type == TileType::Man) && (p.color == PlayerColor::White))
+            pchar = "w";
+        else if ((p.type == TileType::King) && (p.color == PlayerColor::White))
+            pchar = "W";
+        else if ((p.type == TileType::Man) && (p.color == PlayerColor::Black))
+            pchar = "b";
+        else if ((p.type == TileType::King) && (p.color == PlayerColor::Black))
+            pchar = "B";
+        
+        board[1+p.pos.y].replace((p.pos.x+1)*2,1,pchar);
+    }
+
+    // print the board
+    for (std::string s : board)
+        std::cout << s;
+}
+
 std::vector<Piece> applyMoveToBoard(Move themove, std::vector<Piece> piecesonboard)
 {
     // delete the starting piece

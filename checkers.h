@@ -6,6 +6,8 @@
 #include <array>
 #include <vector>
 #include <algorithm>
+#include <string>
+#include <iostream>
 
 namespace Checkers {
 
@@ -68,6 +70,8 @@ const std::vector<Piece> StartingBoard = {Piece(TileType::Man,PlayerColor::Black
                                           Piece(TileType::Man,PlayerColor::White,BoardPos(4,7)),
                                           Piece(TileType::Man,PlayerColor::White,BoardPos(6,7)),
                                           }; 
+
+void printboard(std::vector<Checkers::Piece> piecesonboard);
 
 // a move is comprised of a starting piece, an ending piece, and a list of captured pieces
 class Move {

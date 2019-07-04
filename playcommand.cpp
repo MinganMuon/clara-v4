@@ -98,6 +98,8 @@ void play(std::vector<std::string> cmdlineoptions)
         }
     }
 
+    Checkers::printboard(thegame.getGameState().piecesonboard);
+
     Checkers::GameStatus gs = thegame.determineGameStatus();
     std::string gstext;
     if (gs == Checkers::GameStatus::BlackWon)

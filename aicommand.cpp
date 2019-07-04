@@ -113,7 +113,36 @@ void play(std::vector<std::string> cmdlineoptions)
     }
     else
     {
-        std::cout << "not implemented yet\n";
+        int aionewins = 0;
+        int aitwowins = 0;
+        int draws = 0;
+        int fails = 0;
+        for (int i = 0; i < numberofgames; i++)
+        {
+            Checkers::Game thegame = Checkers::Game();
+            while (thegame.determineGameStatus() == Checkers::GameStatus::NotCompleted)
+            {
+                bool aioneturn = (thegame.getGameState().playertomove == Checkers::PlayerColor::White);
+                Checkers::Move aimove = AISwitchboard::getMoveFromAI((aioneturn ? aione : aitwo),thegame.getGameState(),std::vector<std::string>());
+                if (!thegame.makeMove(aimove))
+                {
+                    fails++;
+                    break;
+                }
+            }
+            Checkers::GameStatus thestatus = thegame.determineGameStatus();
+            if (thestatus == Checkers::GameStatus::WhiteWon)
+                aionewins++;
+            else if (thestatus == Checkers::GameStatus::BlackWon)
+                aitwowins++;
+            else if (thestatus == Checkers::GameStatus::Draw)
+                draws++;
+        }
+        std::cout << "outcome:\n"
+                  << aione + " won " + std::to_string(aionewins*100/numberofgames) + "% (" + std::to_string(aionewins) + ") of the games,\n"
+                  << aitwo + " won " + std::to_string(aitwowins*100/numberofgames) + "% (" + std::to_string(aitwowins) + ") of the games,\n"
+                  << std::to_string(draws*100/numberofgames) + "% (" + std::to_string(draws) + ") of the games resulted in a draw,\n"
+                  << "and " + std::to_string(fails*100/numberofgames) + "% (" + std::to_string(fails) + ") of the games resulted in some kind of error.\n";
     }
 }
 

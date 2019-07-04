@@ -78,10 +78,18 @@ void play(std::vector<std::string> cmdlineoptions)
             std::string colortext = (aioneturn ? "white" : "black");
             std::cout << "\n" + (aioneturn ? aione : aitwo) + " is now playing as " + colortext + ".\n";
 
-            if (!thegame.makeMove(AISwitchboard::getMoveFromAI((aioneturn ? aione : aitwo),thegame.getGameState(),std::vector<std::string>())))
+            Checkers::Move aimove = AISwitchboard::getMoveFromAI((aioneturn ? aione : aitwo),thegame.getGameState(),std::vector<std::string>());
+            if (!thegame.makeMove(aimove))
             {
-                std::cout << "error: the ai failed to make a move.\n\n";
-                std::cout << "quitting...\n";
+                std::cout << "error: the ai failed to make a move.\n";
+                std::cout << "the problematic move: ";
+                std::cout << std::to_string(aimove.startingpiece.pos.x) + " " + std::to_string(aimove.startingpiece.pos.y) + 
+                    " to " + std::to_string(aimove.endingpiece.pos.x) + " " + std::to_string(aimove.endingpiece.pos.y);
+                if (!aimove.jumpedpieces.empty())
+                    std::cout << " jumping the piece(s) at ";
+                for (Checkers::Piece p : aimove.jumpedpieces)
+                    std::cout << std::to_string(p.pos.x) + " " + std::to_string(p.pos.y) + " ";
+                std::cout << "\n\nquitting...\n";
                 return;
             }
 

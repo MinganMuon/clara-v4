@@ -25,7 +25,7 @@ class BoardPos {
         int y;
         bool isValidPos() const { return (isInsideBoard() && isValidTile()); };      // is the position a valid position?
     private:
-        bool isInsideBoard() const { return (x < 7 && y < 7 && x > -1 && y > -1); }; // is the position inside the board?
+        bool isInsideBoard() const { return (x < 8 && y < 8 && x > -1 && y > -1); }; // is the position inside the board?
         bool isValidTile() const { return (y % 2) ? (!(x % 2)) : (x % 2); };         // is the position describing a valid tile?
     public:
         friend bool operator==(const BoardPos& lhs, const BoardPos& rhs)

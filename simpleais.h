@@ -1,5 +1,8 @@
 // simpleais.h
 
+#ifndef SIMPLE_AIS_H
+#define SIMPLE_AIS_H
+
 #include <vector>
 #include <string>
 #include <random>
@@ -19,3 +22,5 @@ const std::vector<std::string> simpleAIsNameList = {"random-ai", "simple-ai"};
 const std::vector<Checkers::Move (*)(const Checkers::GameState &thegamestate)> simpleAIsFuncList = {&getRandomAIMove, &getSimpleEvalSinglePlyAIMove};
 
 }
+
+#endif

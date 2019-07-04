@@ -1,5 +1,8 @@
 // playcommand.h
 
+#ifndef PLAY_COMMAND_H
+#define PLAY_COMMAND_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -18,3 +21,5 @@ void printboard(std::vector<Checkers::Piece> piecesonboard);
 void play(std::vector<std::string> cmdlineoptions);
 
 }
+
+#endif

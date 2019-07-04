@@ -261,6 +261,8 @@ bool Game::makeMove(Move themove)
     currentstate.piecesonboard = applyMoveToBoard(themove, currentstate.piecesonboard);
     
     currentstate.playertomove = (currentstate.playertomove == PlayerColor::White) ? PlayerColor::Black : PlayerColor::White;
+    if (themove.jumpedpieces.empty())
+        numberofunproductivemoves++;
 
     return true;
 }

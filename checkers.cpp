@@ -268,6 +268,8 @@ bool Game::makeMove(Move themove)
     currentstate.playertomove = (currentstate.playertomove == PlayerColor::White) ? PlayerColor::Black : PlayerColor::White;
     if (themove.jumpedpieces.empty())
         numberofunproductivemoves++;
+    else
+        numberofunproductivemoves = 0;
 
     return true;
 }
